@@ -57,6 +57,7 @@ private:
   static Handle<Value> BufferLength(const Arguments &args);
   static Handle<Value> DecodeFile(const Arguments &args);
   static Handle<Value> EncodeDatum(const Arguments &args);
+  static Handle<Value> EncodeDatumFile(const Arguments &args);
   static Handle<Value> DecodeDatum(const Arguments &args);
   static Handle<Value> Close(const Arguments &args);
 
