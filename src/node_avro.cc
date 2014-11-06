@@ -1,6 +1,7 @@
 #include "node_avro.h"
 #include "translate.h"
 #include "helpers.h"
+#include <boost/shared_ptr.hpp>
 
 namespace node {
 
@@ -446,7 +447,7 @@ Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
   Local<Array> byteArray = Array::New();
   ValidSchema schema;
   DataFileWriter<GenericDatum> *writer;
-  auto_ptr<avro::OutputStream> out = avro::memoryOutputStream();
+  boost::shared_ptr<avro::OutputStream> out = boost::shared_ptr<avro::OutputStream>(avro::memoryOutputStream());
   if(args.Length()< 2){
     OnError(ctx, on_error, "EncodeDatum: missing value to encode or schema");
     return scope.Close(Array::New());
@@ -481,7 +482,6 @@ Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
     writer = new DataFileWriter<GenericDatum>(out, schema);
     writer->write(datum);
     writer->flush();
-    writer->close();
 
     // load stream into byte array
     auto_ptr<avro::InputStream> in = avro::memoryInputStream(*out);
@@ -491,6 +491,7 @@ Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
       byteArray->Set(i, Uint32::New(reader.read()));
       i++;
     }
+    //writer->close();
   }catch(MissingDatumFieldException &e){
     string error = e.what();
     OnError(ctx, on_error, error.c_str());
