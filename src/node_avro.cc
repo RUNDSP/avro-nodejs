@@ -446,6 +446,7 @@ Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
   Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
   Local<Array> byteArray = Array::New();
   ValidSchema schema;
+  Codec codec = NULL_CODEC;
   boost::shared_ptr<avro::OutputStream> out =
     boost::shared_ptr<avro::OutputStream>(avro::memoryOutputStream());
   if(args.Length()< 2){
@@ -455,6 +456,21 @@ Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
   if(!args[1]->IsString()){
     OnError(ctx, on_error, "schema must be a string");
     return scope.Close(Array::New());
+  }
+  if(args.Length() == 3){
+    if (!args[2]->IsString()){
+      OnError(ctx, on_error, "codec must be a string");
+      return scope.Close(Array::New());
+    }
+    String::Utf8Value codecV(args[2]->ToString());
+    string codecS = string(*codecV).c_str();
+    if (codecS == "deflate") {
+      codec = DEFLATE_CODEC;
+    }
+    else if (codecS != "null") {
+      OnError(ctx, on_error, "invalid codec");
+      return scope.Close(Array::New());
+    }
   }
   v8::String::Utf8Value schemaString(args[1]->ToString());
   Local<Value> value = args[0];
@@ -480,7 +496,7 @@ Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
 
     // write
     auto_ptr<DataFileWriter<GenericDatum> > writer
-      (new DataFileWriter<GenericDatum>(out, schema));
+      (new DataFileWriter<GenericDatum>(out, schema, 16 * 1024, codec));
     writer->write(datum);
     writer->flush();
     writer->close();
