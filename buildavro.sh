@@ -26,3 +26,6 @@ npm install -g node-gyp
 node-gyp configure build
 # npm install mocha
 # NODE_ENV=test node_modules/.bin/mocha --reporter dot tests/AvroSync.js
+
+# for install:
+# sudo apt-get install -y libfl-dev flex bison libboost-dev
