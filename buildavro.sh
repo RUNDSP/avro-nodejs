@@ -12,6 +12,7 @@ sudo checkinstall -y \
 	--pkgname="avro-cpp" \
 	--pkgrelease="1.7.7" \
 	--maintainer="mplacentra@runads.com" \
+	--requires="flex,bison" \
 	--addso=yes
 
 # mv avro-cpp_20141023-1.7.7_amd64.deb avro-cpp_trusty_20141023-1.7.7_amd64.deb
@@ -25,3 +26,6 @@ npm install -g node-gyp
 node-gyp configure build
 # npm install mocha
 # NODE_ENV=test node_modules/.bin/mocha --reporter dot tests/AvroSync.js
+
+# for install:
+# sudo apt-get install -y libfl-dev flex bison libboost-dev

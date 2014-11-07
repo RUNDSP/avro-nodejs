@@ -1,6 +1,7 @@
 #include "node_avro.h"
 #include "translate.h"
 #include "helpers.h"
+#include <boost/shared_ptr.hpp>
 
 namespace node {
 
@@ -436,6 +437,93 @@ Handle<Value> Avro::EncodeDatum(const Arguments &args){
 }
 
 /**
+ * A synchronous function to encode a datum into an in-memory avro file
+ * @param datum [The datum to be encoded]
+ * @param (optional) schema [The schema to encode the datum with]
+ */
+Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
+  HandleScope scope;
+  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Local<Array> byteArray = Array::New();
+  ValidSchema schema;
+  Codec codec = NULL_CODEC;
+  boost::shared_ptr<avro::OutputStream> out =
+    boost::shared_ptr<avro::OutputStream>(avro::memoryOutputStream());
+  if(args.Length()< 2){
+    OnError(ctx, on_error, "EncodeDatum: missing value to encode or schema");
+    return scope.Close(Array::New());
+  }
+  if(!args[1]->IsString()){
+    OnError(ctx, on_error, "schema must be a string");
+    return scope.Close(Array::New());
+  }
+  if(args.Length() == 3){
+    if (!args[2]->IsString()){
+      OnError(ctx, on_error, "codec must be a string");
+      return scope.Close(Array::New());
+    }
+    String::Utf8Value codecV(args[2]->ToString());
+    string codecS = string(*codecV).c_str();
+    if (codecS == "deflate") {
+      codec = DEFLATE_CODEC;
+    }
+    else if (codecS != "null") {
+      OnError(ctx, on_error, "invalid codec");
+      return scope.Close(Array::New());
+    }
+  }
+  v8::String::Utf8Value schemaString(args[1]->ToString());
+  Local<Value> value = args[0];
+  try {
+    // The object (currently defined as namespace)
+    Local<String> objectType;
+    //if is object then see if there is a namespace else set type to schema
+    if(value->IsObject()){
+      Local<Object> object = value->ToObject();
+      //if namespace use that else use args[1] for type
+      if(object->Has(String::New("namespace"))){
+        objectType = object->Get(String::New("namespace"))->ToString();
+      }else{
+        objectType = args[1]->ToString();
+      }
+    }else{
+      objectType = args[1]->ToString();
+    }
+    String::Utf8Value typeString(objectType);
+    schema = getValidSchema(*typeString, *schemaString, ctx->dictionary_);
+    GenericDatum datum(schema);
+    datum = DecodeV8(datum, value);
+
+    // write
+    auto_ptr<DataFileWriter<GenericDatum> > writer
+      (new DataFileWriter<GenericDatum>(out, schema, 16 * 1024, codec));
+    writer->write(datum);
+    writer->flush();
+    writer->close();
+
+    // load stream into byte array
+    auto_ptr<avro::InputStream> in = avro::memoryInputStream(*out);
+    avro::StreamReader reader(*in);
+    int i = 0;
+    while(reader.hasMore()){
+      byteArray->Set(i, Uint32::New(reader.read()));
+      i++;
+    }
+  }catch(MissingDatumFieldException &e){
+    string error = e.what();
+    OnError(ctx, on_error, error.c_str());
+    return scope.Close(Array::New());
+    
+  }catch(std::exception &e){
+    string error = e.what();
+    string errorMessage = error + *schemaString + "\n";
+    OnError(ctx, on_error, errorMessage.c_str());
+    return scope.Close(Array::New());
+  }
+  return scope.Close(byteArray);
+}
+
+/**
  * A helper function to get a ValidSchema. 
  *
  * @param type. Is a possible mapping into the SymbolMap. If is found the schema associated with it is returned.
@@ -669,6 +757,7 @@ void Avro::Initialize(Handle<Object> target){
   NODE_SET_PROTOTYPE_METHOD(a_temp, "pendingSchemas", Avro::PendingSchemas);
   NODE_SET_PROTOTYPE_METHOD(a_temp, "decodeDatum", Avro::DecodeDatum);
   NODE_SET_PROTOTYPE_METHOD(a_temp, "encodeDatum", Avro::EncodeDatum);
+  NODE_SET_PROTOTYPE_METHOD(a_temp, "encodeDatumFile", Avro::EncodeDatumFile);
   NODE_SET_PROTOTYPE_METHOD(a_temp, "close", Avro::Close);
   a_temp->SetClassName(String::NewSymbol("Avro"));
   target->Set(String::NewSymbol("Avro"), a_temp->GetFunction());

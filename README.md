@@ -15,7 +15,7 @@ A wrapper for the c++ implemenation of Avro.
   avro.decodeDatum([/*array of bytes*/], schema);
 
 #####Example
-	var addon = require('../build/Release/avro');
+	var addon = require('./build/Release/addon');
     var avro = new addon.Avro();
     var bytes = avro.encodeDatum(12345.89, '"double"');
     var result = avro.decodeDatum(bytes, '"double"');
@@ -35,7 +35,7 @@ The result will contain the value that we encoded.
   On the completion the call backs are called. 
 
 #####Example
-	var addon = require('../build/Release/avro');
+	var addon = require('./build/Release/addon');
     var avro = new addon.Avro();
     avro.queueSchema('{"type": "map", "values": "bytes"',
       function(datum){
