@@ -33,15 +33,15 @@ Handle<Value> Avro::New(const Arguments& args){
     std::vector<uint8_t> data;
     ctx->buffer_ = new avronode::BufferedInputStream(data, 0, 0);
     ctx->read_  = true;
-    ctx->avro_loop_ = uv_default_loop();
+    //ctx->avro_loop_ = uv_default_loop();
     ctx->Wrap(args.This());
-    uv_sem_init(&ctx->sem_, 0);
-    uv_mutex_init(&ctx->datumLock_);
-    uv_mutex_init(&ctx->queueLock_);
+    //uv_sem_init(&ctx->sem_, 0);
+    //uv_mutex_init(&ctx->datumLock_);
+    //uv_mutex_init(&ctx->queueLock_);
 
-    uv_async_init(ctx->avro_loop_, &ctx->async_, ResultEvent);
+    //uv_async_init(ctx->avro_loop_, &ctx->async_, ResultEvent);
     //create new work_t
-    uv_work_t *work_req = new uv_work_t;
+    /* uv_work_t *work_req = new uv_work_t;
 
     work_req->data = ctx;
 
@@ -49,7 +49,7 @@ Handle<Value> Avro::New(const Arguments& args){
                   work_req,
                   Process,
                   After);  
-
+*/
     return args.This();
 }
 
@@ -91,19 +91,19 @@ static void ResultEvent(uv_async_t *handle, int status) {
 Handle<Value> Avro::Close(const Arguments &args){
   HandleScope scope;
   Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
-  uv_mutex_lock(&ctx->queueLock_);
-  while(!ctx->processQueue_.empty()){
-    ctx->processQueue_.pop();
-  }
+  //uv_mutex_lock(&ctx->queueLock_);
+  //while(!ctx->processQueue_.empty()){
+  //  ctx->processQueue_.pop();
+  //}
   ctx->read_ = false;
   ctx->buffer_->close();
 
   //set the smart pointer to 0 so that it can be cleaned up.
   //ctx->decoder_.reset();
-  uv_sem_post(&ctx->sem_);
-  uv_mutex_unlock(&ctx->queueLock_);
+  //uv_sem_post(&ctx->sem_);
+  //uv_mutex_unlock(&ctx->queueLock_);
   
-  uv_run(ctx->avro_loop_, UV_RUN_DEFAULT); 
+  //uv_run(ctx->avro_loop_, UV_RUN_DEFAULT); 
 
   //fires off the on close event. 
   OnClose(ctx, on_close);
