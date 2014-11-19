@@ -9,7 +9,7 @@
       'cflags_cc+': ['-frtti', '-fexceptions'],
       'link_settings': {
         'ldflags': ['-L/usr/local/lib'],
-        'libraries': ['-lavrocpp', '-lc++']
+        'libraries': ['-lavrocpp']
       },
       "sources": ["./src/addon.cc", "./src/node_avro.cc", "./src/AvroFileReader.cc", "./src/AvroFileWriter.cc", "./src/DynamicBuffer.cc", "./src/BufferedInputStream.cc", "./src/translate.cc", "./src/helpers.cc"],
       'conditions': [
