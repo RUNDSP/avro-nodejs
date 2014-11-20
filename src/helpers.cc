@@ -8,8 +8,8 @@ vector<uint8_t> getBinaryData(Local<Value> val){
   vector<uint8_t> bytes;
 
   if(Buffer::HasInstance(val)){
-    length = Buffer::Length(val); 
-    data = reinterpret_cast<uint8_t*>(Buffer::Data(val));
+    length = Buffer::Length(val.As<Object>()); 
+    data = reinterpret_cast<uint8_t*>(Buffer::Data(val.As<Object>()));
     return vector<uint8_t>(data, data+length);
   }else if(val->IsArray()){
     Local<Array> array = Local<Array>::Cast(val);

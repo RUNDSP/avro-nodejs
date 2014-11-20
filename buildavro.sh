@@ -2,21 +2,21 @@
 sudo apt-get install -y libboost-all-dev cmake checkinstall g++ flex bison
 
 cd
-git clone https://github.com/apache/avro.git
+git clone https://github.com/RUNDSP/avro.git
 cd avro
-git checkout release-1.7.7
+git checkout release-1.7.7-run1
 cd lang/c++
 cmake -G "Unix Makefiles"
 sudo checkinstall -y \
 	--install=no \
 	--pkgname="avro-cpp" \
-	--pkgrelease="1.7.7" \
+	--pkgrelease="1.7.7-run1" \
 	--maintainer="mplacentra@runads.com" \
 	--requires="flex,bison" \
 	--addso=yes
 
-# mv avro-cpp_20141023-1.7.7_amd64.deb avro-cpp_trusty_20141023-1.7.7_amd64.deb
-# sudo dpkg -i avro-cpp_trusty_20141023-1.7.7_amd64.deb
+# mv avro-cpp_20141023-1.7.7-run1_amd64.deb avro-cpp_trusty_20141023-1.7.7-run1_amd64.deb
+# sudo dpkg -i avro-cpp_trusty_20141023-1.7.7-run1_amd64.deb
 
 cd
 git clone https://github.com/RUNDSP/avro-nodejs.git
