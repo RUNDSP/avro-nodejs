@@ -1,5 +1,5 @@
 {
-  "name": "avronode",
+  "name": "avronode-run",
   "version": "0.2.3-run4",
   "author": {
     "name": "Benjamin Metzger",
@@ -8,7 +8,7 @@
   "main": "./build/Release/avro",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GenslerAppsPod/avro-nodejs.git"
+    "url": "https://github.com/RUNDSP/avro-nodejs.git"
   },
   "dependencies": {
   },
@@ -21,7 +21,7 @@
   "readmeFilename": "README.md",
   "description": "A wrapper for the c++ implemenation of Avro.",
   "bugs": {
-    "url": "https://github.com/GenslerAppsPod/avro-nodejs/issues"
+    "url": "https://github.com/RUNDSP/avro-nodejs/issues"
   },
   "_id": "avronode@0.0.35",
   "dist": {
