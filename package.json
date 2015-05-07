@@ -1,7 +1,10 @@
 {
   "name": "avronode-run",
   "version": "0.2.3-run4",
-  "author": "Benjamin Metzger <benjamindmetzger@gmail.com>",
+  "author": {
+    "name": "Run Engineering",
+    "email": "engineering@runads.com"
+  },
   "main": "./build/Release/avro",
   "repository": {
     "type": "git",
