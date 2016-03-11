@@ -15,6 +15,7 @@
 #include <queue>
 #include "BufferedInputStream.hh"
 #include "helpers.h"
+#include "uv.h"
 
 using namespace node;
 using namespace avro;
