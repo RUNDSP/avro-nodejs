@@ -34,7 +34,7 @@ bool validate(const NodePtr &node, SymbolMap &symbolMap)
     }
 
     if (node->hasName()) {
-        const Name& nm = node->name();
+        const v8::Name& nm = node->name();
         SymbolMap::iterator it = symbolMap.find(nm);
         bool found = it != symbolMap.end() && nm == it->first;
 

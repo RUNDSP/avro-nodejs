@@ -14,7 +14,7 @@ namespace helper {
   
   vector<uint8_t> getBinaryData(Local<Value> val);
 
-  typedef std::map<Name, NodePtr> SymbolMap;
+  typedef std::map<v8::Name, NodePtr> SymbolMap;
 
   bool validate(const NodePtr &node, SymbolMap &symbolMap);
 

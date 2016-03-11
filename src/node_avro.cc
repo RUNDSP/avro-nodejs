@@ -534,7 +534,7 @@ static ValidSchema getValidSchema(string type, string schemaString, helper::Symb
 
   try{
 
-    Name *fullName = new Name(type);
+    v8::Name *fullName = new v8::Name(type);
     helper::SymbolMap::iterator it;
     if((it = dictionary.find(*fullName)) != dictionary.end()){
       return  *(new ValidSchema(it->second));
