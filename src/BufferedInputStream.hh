@@ -8,6 +8,7 @@
 #include <v8.h>
 #include <node.h>
 #include "DynamicBuffer.hh"
+#include "uv.h"
 
 namespace avronode {
 using namespace node;
