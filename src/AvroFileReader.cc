@@ -75,7 +75,7 @@ Handle<Value> AvroFileReader::New(const Arguments& args){
 Handle<Value> AvroFileReader::Read(const Arguments& args){
   HandleScope scope;
 
-  AvroFileReader * obj = ObjectWrap::Unwrap<AvroFileReader>(args.This());
+  AvroFileReader * obj = node::ObjectWrap::Unwrap<AvroFileReader>(args.This());
 
   //TODO construct Generic Datum here
   GenericDatum datum(obj->schema_);
@@ -96,7 +96,7 @@ Handle<Value> AvroFileReader::Read(const Arguments& args){
 Handle<Value> AvroFileReader::Close(const Arguments& args){
   HandleScope scope;
 
-  AvroFileReader* obj = ObjectWrap::Unwrap<AvroFileReader>(args.This());
+  AvroFileReader* obj = node::ObjectWrap::Unwrap<AvroFileReader>(args.This());
 
   obj->reader_->close();
 

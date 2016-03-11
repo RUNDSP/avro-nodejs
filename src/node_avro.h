@@ -31,10 +31,10 @@ struct datumBaton {
   Persistent<Value> onError;
 };
 
-class Avro : public ObjectWrap
+class Avro : public node::ObjectWrap
 {
 public:
-  Avro() : ObjectWrap(), dictionary_(){};
+  Avro() : node::ObjectWrap(), dictionary_(){};
   ~Avro() {};
   std::queue<datumBaton> processQueue_;
   std::vector<datumBaton> datums_;
@@ -49,18 +49,18 @@ public:
   bool read_;
   static void Initialize(Handle<Object> target);
 private: 
-  static Handle<Value> New(const Arguments& args);
-  static Handle<Value> ClearDictionary(const Arguments& args);
-  static Handle<Value> QueueSchema(const Arguments &args);
-  static Handle<Value> AddSchema(const Arguments &args);
-  static Handle<Value> PendingSchemas(const Arguments &args);
-  static Handle<Value> Push(const Arguments &args);  
-  static Handle<Value> BufferLength(const Arguments &args);
-  static Handle<Value> DecodeFile(const Arguments &args);
-  static Handle<Value> EncodeDatum(const Arguments &args);
-  static Handle<Value> EncodeDatumFile(const Arguments &args);
-  static Handle<Value> DecodeDatum(const Arguments &args);
-  static Handle<Value> Close(const Arguments &args);
+  static Handle<Value> New(const v8::internal::Arguments& args);
+  static Handle<Value> ClearDictionary(const v8::internal::Arguments& args);
+  static Handle<Value> QueueSchema(const v8::internal::Arguments &args);
+  static Handle<Value> AddSchema(const v8::internal::Arguments &args);
+  static Handle<Value> PendingSchemas(const v8::internal::Arguments &args);
+  static Handle<Value> Push(const v8::internal::Arguments &args);  
+  static Handle<Value> BufferLength(const v8::internal::Arguments &args);
+  static Handle<Value> DecodeFile(const v8::internal::Arguments &args);
+  static Handle<Value> EncodeDatum(const v8::internal::Arguments &args);
+  static Handle<Value> EncodeDatumFile(const v8::internal::Arguments &args);
+  static Handle<Value> DecodeDatum(const v8::internal::Arguments &args);
+  static Handle<Value> Close(const v8::internal::Arguments &args);
 
 };
 }

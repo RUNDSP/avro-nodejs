@@ -18,9 +18,9 @@ class AvroFileReader: public node::ObjectWrap {
     AvroFileReader(const char* filename);
     ~AvroFileReader();
 
-    static Handle<Value> Read(const Arguments& args);
-    static Handle<Value> Close(const Arguments& args);
-    static Handle<Value> New(const Arguments& args);
+    static Handle<Value> Read(const v8::internal::Arguments& args);
+    static Handle<Value> Close(const v8::internal::Arguments& args);
+    static Handle<Value> New(const v8::internal::Arguments& args);
     static Persistent<Function> constructor;
     DataFileReader<GenericDatum> *reader_;
     ValidSchema schema_;

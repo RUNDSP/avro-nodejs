@@ -90,7 +90,7 @@ static void ResultEvent(uv_async_t *handle, int status) {
  */
 Handle<Value> Avro::Close(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
   //uv_mutex_lock(&ctx->queueLock_);
   //while(!ctx->processQueue_.empty()){
   //  ctx->processQueue_.pop();
@@ -116,7 +116,7 @@ Handle<Value> Avro::Close(const Arguments &args){
  */
 Handle<Value> Avro::QueueSchema(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
   datumBaton baton;
   baton.errorMessage = "";
 
@@ -159,7 +159,7 @@ Handle<Value> Avro::QueueSchema(const Arguments &args){
  */
  Handle<Value> Avro::PendingSchemas(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
 
   return scope.Close(Number::New(ctx->processQueue_.size()));
  }
@@ -171,7 +171,7 @@ Handle<Value> Avro::QueueSchema(const Arguments &args){
  */
 Handle<Value> Avro::Push(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
 
   if (args.Length() > 1) {
     OnError(ctx, on_error, "Wrong number of arguments");
@@ -209,7 +209,7 @@ Handle<Value> Avro::Push(const Arguments &args){
  */
 Handle<Value> Avro::BufferLength(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
 
   return scope.Close(Number::New(ctx->buffer_->size()));
    
@@ -221,7 +221,7 @@ Handle<Value> Avro::BufferLength(const Arguments &args){
  */
 Handle<Value> Avro::AddSchema(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
 
   if(!args[0]->IsString()){
     OnError(ctx, on_error, "schema must be a string");
@@ -249,7 +249,7 @@ Handle<Value> Avro::AddSchema(const Arguments &args){
  */
 Handle<Value> Avro::ClearDictionary(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
 
   //clear the dictionary
   ctx->dictionary_.clear();
@@ -266,7 +266,7 @@ Handle<Value> Avro::ClearDictionary(const Arguments &args){
  */
 Handle<Value> Avro::DecodeFile(const Arguments &args) {  
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
 
   if (args.Length() < 1) {
     ThrowException(v8::Exception::TypeError(String::New("Wrong number of arguments")));
@@ -312,7 +312,7 @@ Handle<Value> Avro::DecodeFile(const Arguments &args) {
  */
 Handle<Value> Avro::DecodeDatum(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
   Handle<Value> datumObject;
   ValidSchema schema;
 
@@ -357,7 +357,7 @@ Handle<Value> Avro::DecodeDatum(const Arguments &args){
  */
 Handle<Value> Avro::EncodeDatum(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
   Local<Array> byteArray = Array::New();
   ValidSchema schema;
   EncoderPtr e;
@@ -443,7 +443,7 @@ Handle<Value> Avro::EncodeDatum(const Arguments &args){
  */
 Handle<Value> Avro::EncodeDatumFile(const Arguments &args){
   HandleScope scope;
-  Avro * ctx = ObjectWrap::Unwrap<Avro>(args.This());
+  Avro * ctx = node::ObjectWrap::Unwrap<Avro>(args.This());
   Local<Array> byteArray = Array::New();
   ValidSchema schema;
   Codec codec = NULL_CODEC;

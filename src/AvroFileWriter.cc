@@ -80,7 +80,7 @@ Handle<Value> AvroFileWriter::New(const Arguments& args){
 Handle<Value> AvroFileWriter::Write(const Arguments& args){
   HandleScope scope;
 
-  AvroFileWriter *ctx = ObjectWrap::Unwrap<AvroFileWriter>(args.This());
+  AvroFileWriter *ctx = node::ObjectWrap::Unwrap<AvroFileWriter>(args.This());
   Local<Value> jsDatum = args[0];
 
   GenericDatum datum(ctx->schema_);
@@ -98,7 +98,7 @@ Handle<Value> AvroFileWriter::Write(const Arguments& args){
 Handle<Value> AvroFileWriter::Close(const Arguments& args){
   HandleScope scope;
 
-  AvroFileWriter* obj = ObjectWrap::Unwrap<AvroFileWriter>(args.This());
+  AvroFileWriter* obj = node::ObjectWrap::Unwrap<AvroFileWriter>(args.This());
 
   obj->writer_->flush();
   obj->writer_->close();
